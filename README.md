@@ -1,62 +1,100 @@
-# :package_description
+# Hitta.se API wrapper for Laravel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/vendor_slug/package_slug.svg?style=flat-square)](https://packagist.org/packages/vendor_slug/package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/vendor_slug/package_slug/run-tests?label=tests)](https://github.com/vendor_slug/package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/vendor_slug/package_slug/Check%20&%20fix%20styling?label=code%20style)](https://github.com/vendor_slug/package_slug/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/vendor_slug/package_slug.svg?style=flat-square)](https://packagist.org/packages/vendor_slug/package_slug)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/grafstorm/hittase-php-api-for-laravel.svg?style=flat-square)](https://packagist.org/packages/grafstorm/hittase-php-api-for-laravel)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/grafstorm/hittase-php-api-for-laravel/run-tests?label=tests)](https://github.com/grafstorm/hittase-php-api-for-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/grafstorm/hittase-php-api-for-laravel/Check%20&%20fix%20styling?label=code%20style)](https://github.com/grafstorm/hittase-php-api-for-laravel/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/grafstorm/hittase-php-api-for-laravel.svg?style=flat-square)](https://packagist.org/packages/grafstorm/hittase-php-api-for-laravel)
 
----
-This repo can be used as to scaffold a Laravel package. Follow these steps to get started:
+This package uses the Hitta.se API PHP package `grafstorm/hitta_php_package` and packages it for Laravel.
+All you need to get going is setting the correct callerId and apiKey in you .env file.``
 
-1. Press the "Use template" button at the top of this repo to create a new repo with the contents of this skeleton
-2. Run "./configure-skeleton.sh" to run a script that will replace all placeholders throughout all the files
-3. Remove this block of text.
-4. Have fun creating your package.
-5. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
+See http://hitta.github.io/public/http-api/ for more detailed info on what fields are available.
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+This package is an unofficial package and is still in beta. 
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require vendor_slug/package_slug
+composer require grafstorm/hittase-php-api-for-laravel
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --provider="VendorName\Skeleton\SkeletonServiceProvider" --tag="package_slug-migrations"
-php artisan migrate
-```
-
+## Configuration
 You can publish the config file with:
 ```bash
-php artisan vendor:publish --provider="VendorName\Skeleton\SkeletonServiceProvider" --tag="package_slug-config"
+php artisan vendor:publish --provider="Grafstorm\Hitta\HittaServiceProvider" --tag="hittase-php-api-for-laravel-config"
+```
+
+Be sure to add callerId and apiKey in your .env file:
+```
+HITTA_CALLER_ID=## your caller id ## 
+HITTA_API_KEY=## your api key ##
 ```
 
 This is the contents of the published config file:
 
 ```php
 return [
+    'callerId' => env('HITTA_CALLER_ID'),
+    'apiKey' => env('HITTA_API_KEY'),
 ];
 ```
 
 ## Usage
 
 ```php
-$skeleton = new VendorName\Skeleton();
-echo $skeleton->echoPhrase('Hello, Spatie!');
+// Hitta.se API Wrapper as a Laravel Package
+// Search for Swedish companies and people
+
+// Combined search. You can also explicitly call Hitta::combined()
+Hitta::what('Luke Skywalker')
+  ->where('Kiruna')
+  ->find();
+  
+$result = Hitta::combined()
+  ->what('Empire')
+  ->where('Deathstar')
+  ->find();
+
+foreach($result->companies as $company) {
+  echo $company->displayName . "\n";
+}
+
+foreach($result->people as $person) {
+  echo $person->displayName . "\n";
+}
+
+// Only Search for people
+Hitta::people()
+  ->what('Luke Skywalker')
+  ->find();
+  
+// Only Search for companies
+Hitta::companies()
+  ->what('Empire')
+  ->find();
+  
+// Optional search parameters
+Hitta::companies()
+  ->what('Luke Skywalker')
+  ->where('Kiruna')
+  ->pageNumber(1)
+  ->pageSize(10)
+  ->rangeFrom(100)
+  ->rangeTo(150)
+  ->find();
+
+// Fetching details of a company or person with findPerson and findCompany.
+$result = Hitta::people()
+  ->what('Luke Skywalker')
+  ->find();
+  
+$personId = collect($result->people)->first()->id;
+$companyId = collect($result->companies)->first()->id;
+
+Hitta::findPerson($personId);
+Hitta::findCompany($companyId);
 ```
 
 ## Testing
@@ -79,7 +117,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [grafi](https://github.com/argia-andreas)
 - [All Contributors](../../contributors)
 
 ## License

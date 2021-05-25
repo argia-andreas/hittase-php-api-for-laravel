@@ -1,24 +1,25 @@
 {
-    "name": "vendor_slug/package_slug",
-    "description": ":package_description",
+    "name": "grafstorm/hittase-php-api-for-laravel",
+    "description": "This is my package Hitta",
     "keywords": [
-        ":vendor_name",
+        "grafstorm",
         "laravel",
-        "package_slug"
+        "hittase-php-api-for-laravel"
     ],
-    "homepage": "https://github.com/vendor_slug/package_slug",
+    "homepage": "https://github.com/grafstorm/hittase-php-api-for-laravel",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "grafi",
+            "email": "andreas@grafstrom.io",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.0",
         "spatie/laravel-package-tools": "^1.4.3",
-        "illuminate/contracts": "^8.37"
+        "illuminate/contracts": "^8.37",
+        "grafstorm/hitta_php_package": "@dev"
     },
     "require-dev": {
         "brianium/paratest": "^6.2",
@@ -30,13 +31,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Grafstorm\\Hitta\\": "src",
+            "Grafstorm\\Hitta\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Grafstorm\\Hitta\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -50,10 +51,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Grafstorm\\Hitta\\HittaServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\SkeletonFacade"
+                "Hitta": "Grafstorm\\Hitta\\HittaFacade"
             }
         }
     },
