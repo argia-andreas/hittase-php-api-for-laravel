@@ -98,7 +98,7 @@ Hitta::findCompany($companyId);
 ```
 
 ## Testing
-
+See grafstorm/hitta_php_package for tests.
 ```bash
 composer test
 ```
